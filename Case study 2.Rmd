@@ -1,0 +1,142 @@
+Case Study 2: Bellabeat
+
+loading library
+
+```{r Library}
+library(ggplot2)
+library(tidyverse)
+```
+
+import dataset
+
+```{r importing}
+activity <- read.csv("dailyActivity_merged.csv")
+sleep <- read.csv("sleepDay_merged.csv")
+
+```
+
+head of each dataset
+
+```{r}
+head(activity)
+head(sleep)
+```
+
+Summary of each dataset
+
+```{r}
+summary(activity)
+summary(sleep)
+```
+
+Average step :7638
+
+Mean VeryActiveMinutes :21.16
+
+Mean FairlyActiveMinutes:13.56
+
+Mean LightlyActiveMinutes :192.8
+
+Mean SedentaryMinutes :991.2
+
+Mean TotalMinutesAsleep :419.5
+
+Mean TotalTimeInBed :458.6
+
+Between the mean of the Sedentary Minutes and VeryActiveminutes it has a very huge gap which might be one of the recommendation to the user to decrease the sedentary minutes
+
+Average user sleep 7.5 hours/day and the difference between the TotalMinutesAsleep and TotalTimeInBed is approximately 39 minutes where else this can also be used as one of the recommendation to use the 39 minutes more effectively
+
+Plotting to find relation between variable
+
+```{r}
+ggplot(activity, mapping = aes(x=VeryActiveMinutes, y=SedentaryMinutes)) + 
+  geom_point() + geom_smooth() +
+  labs(title="Very Active Minutes vs. Sedentary Minutes")
+```
+
+```{r}
+ggplot(activity, mapping = aes(x=TotalSteps, y=VeryActiveMinutes)) + 
+  geom_point() + geom_smooth() +
+  labs(title="Very Active Minutes vs. TotalSteps")
+```
+
+```{r}
+ggplot(activity, mapping = aes(x=TotalSteps, y=FairlyActiveMinutes)) + 
+  geom_point() + geom_smooth() +
+  labs(title="FairlyActiveMinutes vs. TotalSteps")
+```
+
+```{r}
+ggplot(activity, mapping = aes(x=TotalSteps, y=LightlyActiveMinutes )) + 
+  geom_point() + geom_smooth() +
+  labs(title="LightlyActiveMinutes  vs. TotalSteps")
+
+```
+
+```{r}
+ggplot(activity, mapping = aes(x=TotalSteps, y=SedentaryMinutes )) + 
+  geom_point() + geom_smooth() +
+  labs(title="SedentaryMinutes  vs. TotalSteps")
+
+```
+
+Now we will see the trend in the sleep dataset
+
+```{r}
+ggplot(sleep, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) + 
+  geom_point() + geom_smooth() +
+  labs(title="TotalMinutesAsleep  vs. TotalTimeInBed")
+```
+
+Merging of both dataset based on ID
+
+```{r}
+sleep <- separate(sleep, col="SleepDay", into=c("Date", "Time"), sep="\\s")
+activity <- rename(activity, Date=ActivityDate)
+combined_data <- merge(activity, sleep, by=c('Id', 'Date'))
+```
+
+lets see the trend inside the combined data
+
+```{r}
+ggplot(combined_data, mapping=aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) +
+  geom_point() + geom_smooth() +
+  labs(title="Minutes Asleep vs. Sedentary Minutes")
+```
+
+```{r}
+ggplot(combined_data, mapping=aes(x=TotalMinutesAsleep, y=VeryActiveMinutes)) +
+  geom_point() + geom_smooth() +
+  labs(title="Minutes Asleep vs. Very Active Minutes")
+```
+
+```{r}
+ggplot(combined_data, mapping=aes(x=TotalSteps, y=TotalMinutesAsleep)) +
+  geom_point() + geom_smooth() +
+  labs(title="Minutes Asleep vs. TotalSteps")
+```
+
+### **Act**
+
+-   What are some trends in smart device usage?
+
+    -   The total sleeping time effect the Sedentary time of the user where the higher the total sleeping time the lower the sedentary time
+
+    -   The longer the user sleep the higher the total bed in time where it has approximately difference of 39 minutes where the user maybe used for trying to sleep or other activity in the bed
+
+    -   The higher the total steps of the user the lower the sedentary time meanwhile the very active time of the user is increased along the total steps increasement
+
+-   How could these trends apply to Bellabeat customers?
+
+    -   It can be applied since Bellabeat and Fitbit should be the same in the product that they sell which is the health device
+
+-   How could these trends help influence Bellabeat marketing strategy?
+
+    -   First by showing the statistic that the product can help the user be more healthier the user will be more likely to try the product where it comes with recommendation to increase sleep time or increasing total steps to decrease the sedentary time where the product is mainly on tracking activity, sleep, and stress
+
+Recommendation
+
+We could recommend the Bellabeat to increase the sleeping time of the user to have healthier lifestyle while also reducing the sedentary time also since the sedentary time is correlated to less active time so this is one of the recommendations
+
+Bellabeat should recommend the user to used the time in the bed for other more useful activities rather than wasting so many times it can be doing activities that help to get sleep faster on the bed which will also increase health and productivity of the user.
